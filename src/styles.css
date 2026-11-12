@@ -995,3 +995,95 @@ html.is-pinned .services {
 .garment-tilt[data-cloth] .cloth-canvas { visibility: visible; }
 /* hide the live shirt but keep the annotation leader lines drawn on top */
 .garment-tilt[data-cloth] .garment__svg > :not(.annot-lines):not(defs) { visibility: hidden; }
+
+/* =========================================================================
+   Finish studies reel (desktop, WebGL). Grid is the fallback everywhere else.
+   ========================================================================= */
+.reel { display: none; }
+.studies--reel { padding: 0; }
+.studies--reel .studies__head,
+.studies--reel .studies__grid { display: none; }
+.studies--reel .reel {
+  display: block;
+  position: relative;
+  height: calc(100svh - var(--header-h));
+  min-height: 560px;
+  overflow: hidden;
+  background: var(--ivory);
+}
+.reel__kicker {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  top: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid var(--rule);
+  z-index: 4;
+}
+.reel__title { position: absolute; inset: 0; margin: 0; pointer-events: none; z-index: 1; }
+.reel__word {
+  position: absolute;
+  font-size: min(15.5vw, 27svh);
+  line-height: 0.98;
+  white-space: nowrap;
+}
+.reel__word--a { left: var(--gutter); top: calc(20px + 48px); }
+.reel__word--b { right: var(--gutter); bottom: 4svh; }
+.reel__canvas {
+  position: absolute;
+  left: 50%;
+  top: calc(50% - 4svh);
+  width: min(96vw, 1800px);
+  height: calc(100% - 96px);
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.reel-ring {
+  position: absolute;
+  left: 50%;
+  top: calc(50% - 2svh);
+  width: min(62vw, 120svh);
+  height: min(30svh, 16vw);
+  transform: translate(-50%, -50%) rotate(-14deg);
+  pointer-events: none;
+}
+.reel-ring svg { width: 100%; height: 100%; overflow: visible; }
+.reel-ring--back { z-index: 1; opacity: 0.45; }
+/* only the lower half of the ring crosses in front of the cards */
+.reel-ring--front { z-index: 3; clip-path: inset(50% -5% -5% -5%); }
+.reel-ring__line { fill: none; stroke: var(--lime); stroke-width: 1.4; vector-effect: non-scaling-stroke; }
+.reel-ring__glint {
+  fill: none;
+  stroke: var(--lime);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-dasharray: 0.16 0.84;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 4px rgba(213, 255, 0, 0.9));
+}
+.reel__caption {
+  position: absolute;
+  left: var(--gutter);
+  bottom: 4svh;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 14px;
+  width: min(30vw, 380px);
+  padding: 14px 16px 16px;
+  background: var(--ivory);
+  border: 1.5px solid var(--ink);
+}
+.reel__count { grid-column: 1 / -1; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 6px; }
+.reel__name { font-family: var(--display); text-transform: uppercase; font-size: clamp(22px, 2vw, 30px); line-height: 1; }
+.reel__note { grid-column: 2; color: var(--muted); font-size: 14px; }
+.reel__disclaimer {
+  position: absolute;
+  right: var(--gutter);
+  top: calc(20px + 48px);
+  z-index: 4;
+  width: min(24vw, 300px);
+  font-size: 13px;
+  color: var(--muted);
+}
+.reel__slot { position: absolute; inset: 0; z-index: 2; pointer-events: none; }

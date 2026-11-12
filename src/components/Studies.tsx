@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef } from 'react'
 import { studies } from '../data'
 import { gsap, MOTION_QUERY } from '../motion'
 import { Photo } from './Photo'
+import { StudiesReel } from './StudiesReel'
 
 export function Studies() {
   const root = useRef<HTMLElement>(null)
@@ -37,6 +38,7 @@ export function Studies() {
 
   return (
     <section ref={root} id="studies" className="studies" aria-labelledby="studies-title">
+      <StudiesReel />
       <header className="studies__head">
         <p className="kicker">Selected work / Finish studies</p>
         <h2 id="studies-title" className="display studies__title">
