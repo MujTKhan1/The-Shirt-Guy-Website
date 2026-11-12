@@ -981,3 +981,17 @@ html.is-pinned .services {
 }
 .garment-tilt[data-baked] .garment__svg { visibility: hidden; }
 .garment-tilt[data-baked] .garment-baked { visibility: visible; }
+
+/* hero cloth: WebGL canvas over the garment box (with a margin so ripples don't clip) */
+.cloth-canvas {
+  position: absolute;
+  left: calc(var(--cloth-pad) * -100%);
+  top: calc(var(--cloth-pad) * -100%);
+  width: calc((1 + 2 * var(--cloth-pad)) * 100%);
+  height: calc((1 + 2 * var(--cloth-pad)) * 100%);
+  pointer-events: none;
+  visibility: hidden;
+}
+.garment-tilt[data-cloth] .cloth-canvas { visibility: visible; }
+/* hide the live shirt but keep the annotation leader lines drawn on top */
+.garment-tilt[data-cloth] .garment__svg > :not(.annot-lines):not(defs) { visibility: hidden; }

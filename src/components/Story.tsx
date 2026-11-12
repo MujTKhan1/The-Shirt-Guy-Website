@@ -5,6 +5,7 @@ import { Arrow } from './Arrow'
 import { Photo } from './Photo'
 import { clients, processPhotos } from '../data'
 import { bakeGarment } from '../bakeGarment'
+import { createCloth, type Cloth } from '../cloth'
 
 const stages = [
   {
@@ -232,15 +233,15 @@ export function Story() {
       let bakedReady = false
       let bakedUrl: string | null = null
       let disposed = false
+      // Hero cloth (WebGL) uses the same bitmap; it only runs while the hero is untouched by scroll
+      let cloth: Cloth | null = null
       const syncBaked = () => {
-        const on = bakedReady && tl.time() >= tl.labels.c - 0.02
+        const t = tl.time()
+        const on = bakedReady && t >= tl.labels.c - 0.02
         if (tilt.hasAttribute('data-baked') !== on) tilt.toggleAttribute('data-baked', on)
+        cloth?.setActive(t < 0.02)
       }
-      const idle = (fn: () => void) => {
-        if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(fn, { timeout: 2500 })
-        else setTimeout(fn, 600)
-      }
-      document.fonts.ready.then(() => idle(async () => {
+      document.fonts.ready.then(async () => {
         if (disposed || !liveSvg || !bakedImg) return
         const url = await bakeGarment(liveSvg)
         if (!url || disposed) { if (url) URL.revokeObjectURL(url); return }
@@ -249,8 +250,14 @@ export function Story() {
         try { await bakedImg.decode() } catch { return }
         if (disposed) return
         bakedReady = true
+        cloth = createCloth({
+          host: tilt,
+          box: liveSvg,
+          image: bakedImg,
+          interactive: window.matchMedia('(pointer: fine)').matches,
+        })
         syncBaked()
-      }))
+      })
 
       const ticks = q('.stage-progress li')
       const bounds = [tl.labels.b, tl.labels.c]
@@ -267,6 +274,8 @@ export function Story() {
 
       return () => {
         disposed = true
+        cloth?.dispose()
+        cloth = null
         tilt.removeAttribute('data-baked')
         bakedImg.removeAttribute('src')
         if (bakedUrl) URL.revokeObjectURL(bakedUrl)
